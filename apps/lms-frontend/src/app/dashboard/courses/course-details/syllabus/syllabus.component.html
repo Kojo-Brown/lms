@@ -1,0 +1,69 @@
+<mat-card class="syllabus-container">
+  <mat-card-header>
+    <mat-card-title>Course Syllabus</mat-card-title>
+  </mat-card-header>
+  
+  <mat-card-content>
+    <div *ngIf="isInstructor()" class="upload-section">
+      <div
+        class="upload-area"
+        [class.dragging]="isDragging"
+        (dragover)="onDragOver($event)"
+        (dragleave)="onDragLeave($event)"
+        (drop)="onDrop($event)">
+        <mat-icon>cloud_upload</mat-icon>
+        <span>Drag and drop files here or</span>
+        <button mat-raised-button color="primary" (click)="fileInput.click()">
+          Browse Files
+        </button>
+        <input
+          #fileInput
+          type="file"
+          hidden
+          accept=".pdf,.doc,.docx"
+          (change)="onFileSelected($event)">
+      </div>
+      
+      <mat-progress-bar
+        *ngIf="uploadProgress > 0"
+        mode="determinate"
+        [value]="uploadProgress">
+      </mat-progress-bar>
+      
+      <div *ngIf="uploadError" class="error-message">
+        {{ uploadError }}
+      </div>
+    </div>
+
+    <div class="documents-list">
+      <mat-card *ngFor="let doc of documents" class="document-item">
+        <div class="document-info">
+          <mat-icon>description</mat-icon>
+          <div class="document-details">
+            <h3>{{ doc.name }}</h3>
+            <span>{{ formatFileSize(doc.size) }}</span>
+          </div>
+        </div>
+        
+        <div class="document-actions">
+          <button
+            mat-icon-button
+            color="primary"
+            (click)="downloadDocument(doc)"
+            matTooltip="Download">
+            <mat-icon>download</mat-icon>
+          </button>
+          
+          <button
+            *ngIf="isInstructor"
+            mat-icon-button
+            color="warn"
+            (click)="deleteDocument(doc)"
+            matTooltip="Delete">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </div>
+      </mat-card>
+    </div>
+  </mat-card-content>
+</mat-card>

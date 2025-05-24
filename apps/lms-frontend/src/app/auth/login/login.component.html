@@ -1,0 +1,114 @@
+<div class="container">
+  <div class="illustration">
+    <img src="education.svg" alt="education" />
+  </div>
+
+  <div class="form">
+    <div class="form-content">
+      <div class="header">
+        <h1>Login</h1>
+        <p>Please enter your details to login</p>
+      </div>
+
+      <form (ngSubmit)="submit()" [formGroup]="loginForm">
+        <mat-form-field appearance="outline">
+          <mat-label>Email</mat-label>
+          <input
+            matInput
+            type="email"
+            formControlName="email"
+            placeholder="Enter your email"
+          />
+        </mat-form-field>
+        @if (emailControl?.invalid && emailControl?.touched) {
+          @if (emailControl?.errors?.['required']) {
+            <mat-error class="error">Email is required</mat-error>
+          }
+          @if (emailControl?.errors?.['email']) {
+            <mat-error class="error">Please enter a valid email address</mat-error>
+          }
+        }
+
+        <mat-form-field appearance="outline">
+          <mat-label>Password</mat-label>
+          <input
+            matInput
+            [type]="showPassword ? 'text' : 'password'"
+            formControlName="password"
+            placeholder="Enter your password"
+          />
+          <button
+            type="button"
+            mat-icon-button
+            matSuffix
+            (click)="togglePasswordVisibility()"
+          >
+            <mat-icon>{{ showPassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+          </button>
+        </mat-form-field>
+        @if (passwordControl?.invalid && passwordControl?.touched) {
+          @if (passwordControl?.errors?.['required']) {
+            <mat-error class="error">Password is required</mat-error>
+          }
+          @if (passwordControl?.errors?.['passwordStrength']) {
+            <div class="password-criteria">
+              <p>Password must contain:</p>
+              <ul>
+                @if (passwordControl?.errors?.['passwordStrength']?.minLength) {
+                  <li class="invalid">At least 8 characters</li>
+                } @else {
+                  <li class="valid">At least 8 characters</li>
+                }
+                
+                @if (passwordControl?.errors?.['passwordStrength']?.upperCase) {
+                  <li class="invalid">At least one uppercase letter</li>
+                } @else {
+                  <li class="valid">At least one uppercase letter</li>
+                }
+                
+                @if (passwordControl?.errors?.['passwordStrength']?.lowerCase) {
+                  <li class="invalid">At least one lowercase letter</li>
+                } @else {
+                  <li class="valid">At least one lowercase letter</li>
+                }
+                
+                @if (passwordControl?.errors?.['passwordStrength']?.numbers) {
+                  <li class="invalid">At least one number</li>
+                } @else {
+                  <li class="valid">At least one number</li>
+                }
+                
+                @if (passwordControl?.errors?.['passwordStrength']?.specialCharacters) {
+                  <li class="invalid">At least one special character</li>
+                } @else {
+                  <li class="valid">At least one special character</li>
+                }
+              </ul>
+            </div>
+          }
+        }
+
+        <div class="login__action">
+          <button 
+            type="submit"
+            mat-flat-button 
+            class="submit__btn"
+            [disabled]="loginForm.invalid || isLoading"
+          >
+            @if (isLoading) {
+              <mat-spinner diameter="20"></mat-spinner>
+              <span class="loading-text">Logging in...</span>
+            } @else {
+              <span>Login</span>
+            }
+          </button>
+          
+          <div class="action-links">
+            <a routerLink="/sign-up">Don't have an account?</a>
+            <a routerLink="/forgot-password">Forgot password?</a>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
